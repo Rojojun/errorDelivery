@@ -27,7 +27,7 @@ public class FoodService {
     public void createFood(List<FoodRequestDto> requestDto, Long restaurantId) {
 
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
-                .orElseThrow( () -> new RuntimeException( "등록되지 않은 레스토랑입니다." ) );
+                .orElseThrow( () -> new RuntimeException( "등록되지 않은 식당입니다." ) );
                 //.orElseThrow(RuntimeException::new);
 
         List<String> foodListByRestaurantId = foodRepository.findFoodNameByRestaurantId(restaurantId);//이미 등록된 푸드리스트조회
@@ -47,7 +47,7 @@ public class FoodService {
                 }
                 String foodName2 = requestFoodNames.get(j);
                 if (foodName1.equals(foodName2)) { //신규로 등록될 푸드중에 중복된 네임이 있으면 에러처리
-                    throw new RuntimeException("요청된 음식리스트 중에 중복된 음식이 있습니다.");
+                    throw new RuntimeException("요청된 메뉴들 중에 중복된 이름을 가진 메뉴가 있습니다.");
                 }
             }
         }
@@ -59,20 +59,20 @@ public class FoodService {
             //이미 등록된 푸드와 신규로 등록될 푸드명 비교
             for (String foodNameByRestaurantId : foodListByRestaurantId) {
                 if (requestFoodName.equals(foodNameByRestaurantId)) {
-                    throw new RuntimeException("이미 등록된 음식입니다.");
+                    throw new RuntimeException("이미 등록된 메뉴입니다.");
                 }
             }
 
             //가격
             if (requestFoodPrice < 100 || requestFoodPrice > 1000000) {
-                throw new RuntimeException("가아아아아격.");
+                throw new RuntimeException("메뉴 가격은 100원 이상 1,000,000 미만으로 설정할 수 있습니다.");
             }
 
             //최소주문가격 체크
             // int price = foodPrice;
 
             if ((requestFoodPrice % 100) != 0) {
-                throw new RuntimeException("최소 주문가격을 확인해 주세요.");
+                throw new RuntimeException("메뉴 가격은 10원 단위 이하는 등록할 수 없습니다.");
             }
 
             Food food = foodRequestDto.toEntity();
@@ -81,10 +81,15 @@ public class FoodService {
         }
     }
 
+    // 멘유판 멘유판~ 멘체스터유나이티드 훔바훔바!
     @Transactional(readOnly = true)
     public List<Food> getFood(Long restaurantId) {
-        List<Food> foods = foodRepository.findAllByRestaurantId(restaurantId);
-        return foods;
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(
+                () -> new NullPointerException("음식점 id가 없음")
+        );
+        /*List<Food> foods = foodRepository.findAllByRestaurantId(restaurantId);
+        return foods;*/
+        return foodRepository.findAllByRestaurantId(restaurant.getId());
     }
 }
 

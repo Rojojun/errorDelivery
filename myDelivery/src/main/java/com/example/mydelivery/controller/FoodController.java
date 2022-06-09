@@ -19,7 +19,6 @@ public class FoodController {
     // 음식점에 음식 등록
     @PostMapping("/restaurant/{restaurantId}/food/register")
     public void createFood(@RequestBody List<FoodRequestDto> requestDto, @PathVariable Long restaurantId) {
-        System.out.println(restaurantId);
         foodService.createFood(requestDto, restaurantId);
         //응답보내기
     }
@@ -27,7 +26,6 @@ public class FoodController {
     // 음식점에 음식 조회
     @GetMapping("/restaurant/{restaurantId}/foods")
     public List<Food> getFood(@PathVariable Long restaurantId) {
-        List<Food> foods = foodService.getFood(restaurantId);
-        return foods;
+        return foodService.getFood(restaurantId);
     }
 }

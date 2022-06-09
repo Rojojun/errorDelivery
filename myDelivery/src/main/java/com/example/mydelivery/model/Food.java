@@ -2,12 +2,12 @@ package com.example.mydelivery.model;
 
 import com.example.mydelivery.dto.FoodRequestDto;
 import com.example.mydelivery.dto.RestaurantRequestDto;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
+@AllArgsConstructor // for builder
+@NoArgsConstructor
 @Setter
 @Getter
 @Entity
@@ -17,27 +17,29 @@ public class Food {
     @Id
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
     private Long price;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
-    public Food(FoodRequestDto requestDto) {
-        this.name = requestDto.getName();
-        this.price = requestDto.getPrice();
-    }
+
 
     @Builder
-    public Food (String name, Long price, Restaurant restaurant) {
+    public Food ( String name, long price) {
         this.name = name;
         this.price = price;
     }
 
+
+
     public void registRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
     }
+
+
 }

@@ -1,16 +1,21 @@
 package com.example.mydelivery.dto;
 
 import com.example.mydelivery.model.Food;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.example.mydelivery.model.Restaurant;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Builder
 public class FoodRequestDto {
+
+    private Long restaurantId;
+
+    private Long id;
     // 음식명
     @NotBlank(message = "Name cannot be empty")
     private String name;
@@ -19,11 +24,14 @@ public class FoodRequestDto {
     private Long price;
     // 음식점 고유값
 
-    public Food toEntity() {
-        return Food.builder().name(name).price(price).build();
+
+
+   public Food toEntity() {
+        return Food.builder()
+                .name(this.name)
+                .price(this.price)
+                .build();
     }
 
-//    public Food toEntity() {
-//        return Food.builder().name(name).price(price).build();
-//    }
+
 }
